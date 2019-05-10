@@ -1,0 +1,8 @@
+django-heroku
+gunicorn
+djangorestframework
+numpy
+pandas
+scikit-learn==0.21rc2
+Cython
+SciPy
