@@ -1,5 +1,6 @@
 import json
 import math
+import re
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,10 +9,9 @@ from sklearn import tree
 from sklearn.tree.export import export_text
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
-from pandas import read_json
+from pandas import read_json, read_csv
 from pandas import DataFrame
 from django.shortcuts import HttpResponse
-import re
 
 class Tree(APIView):
     def get(self, request):
@@ -78,7 +78,8 @@ class Tree(APIView):
         return res
 
     def post(self, request):
-        file = request.FILES['archivo']
+        fileD = request.FILES['archivo']
+        formato = request.POST.get('formato')
         col = request.POST.get('columna_objetivo')
         max_depth = request.POST.get('profundidad')
         null_data = request.POST.get('datos_null')
@@ -86,7 +87,12 @@ class Tree(APIView):
         if col == None or col == "":
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        data = read_json(file)
+        if formato=="JSON":
+            data = read_json(fileD)
+        elif formato=="CSV":
+            data = read_csv(fileD)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if data.isnull().values.any():
             if not null_data is None:
@@ -108,6 +114,7 @@ class Tree(APIView):
             le.fit(data[d])
             labels_encoders[d] = le
             data[d] = le.transform(data[d])
+        
         x = DataFrame.copy(data).drop(col, axis=1)
         y = DataFrame.copy(data).drop(data.columns.difference([col]), axis=1)
 
