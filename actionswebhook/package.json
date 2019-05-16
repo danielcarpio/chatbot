@@ -12,7 +12,8 @@
     "actions-on-google": "^2.5.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "engines": {
     "node": "10.x"
