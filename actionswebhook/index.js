@@ -275,7 +275,7 @@ app.intent('pregsustituir', (conv, {cielo, humedad, temperatura, intviento}) => 
     return generarArbol(conv)
     .then(data => {
         arbol = data;
-        conv.ask('Se ha generado el árbol. ¿Quieres hacer algo más?');
+        conv.close('Se ha generado el árbol.');
     })
     .catch(err => {
         conv.close('Lo siento, hubo un problema');
