@@ -120,6 +120,6 @@ class Tree(APIView):
 
         clf.fit(x, y)
 
-        tree_text = export_text(clf)
+        tree_text = export_text(clf, max_depth=99999999)
         jsonres = self.transformar_json(tree_text.split('\n'), labels_encoders, 0, col)
         return Response(jsonres, status=status.HTTP_200_OK)
